@@ -1,0 +1,10 @@
+*.test
+*.out
+.idea
+.DS_Store
+/redis-data
+.env
+go.mod
+go.sum
+db.json
+yarb

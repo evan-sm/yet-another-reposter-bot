@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "name": "wmw",
+      "social": {
+        "instagram": "wmw",
+        "instagram_id": 123,
+        "instagram_post_timestamp": 0,
+        "instagram_story_timestamp": 0,
+        "vk_page_id": 1,
+        "vk_page_timestamp": 0,
+        "vk_public_id": -1,
+        "vk_public_timestamp": 0
+      }
+    },
+    {
+      "name": "ivan",
+      "social": {
+        "instagram": "sharishanya",
+        "instagram_id": 123,
+        "vk_page_id": 1,
+        "vk_page_timestamp": 0,
+        "vk_public_id": -1,
+        "vk_public_timestamp": 0
+      }
+    }
+  ]
+}
