@@ -22,67 +22,66 @@ type Users struct {
 // User struct which contains a name
 // a type and a list of social links
 type User struct {
-	Name   string `json:"name"`
-	Social Social `json:"social"`
-	Date Date `json:"date"`
-	Repost Repost `json:"repost"`
+	Name    string  `json:"name"`
+	Social  Social  `json:"social"`
+	Date    Date    `json:"date"`
+	Setting Setting `json:"setting"`
+	Repost  Repost  `json:"repost"`
 }
 
 // Social struct which contains a
 // list of links
 type Social struct {
-	Instagram               string `json:"instagram"`
-	InstagramID             int    `json:"instagram_id"`
-	VkPageID                int    `json:"vk_page_id"`
-	VkPublicID              int    `json:"vk_public_id"`
+	Instagram   string `json:"instagram"`
+	InstagramID int    `json:"instagram_id"`
+	VkPageID    int    `json:"vk_page_id"`
+	VkPublicID  int    `json:"vk_public_id"`
+	TikTok  string    `json:"tiktok"`
 }
 
 // Date struct which contains a
 // list of timestamps of the latest posts
 type Date struct {
-	InstagramPost  int    `json:"instagram_post"`
-	InstagramStory int    `json:"instagram_story"`
-	VkPage         int    `json:"vk_page"`
-	VkPublic       int    `json:"vk_public"`
+	InstagramPost  int `json:"instagram_post"`
+	InstagramStory int `json:"instagram_story"`
+	VkPage         int `json:"vk_page"`
+	VkPublic       int `json:"vk_public"`
+	TikTok       int `json:"tiktok"`
+}
+
+type Setting struct {
+	InstagramPost  bool `json:"instagram_post"`
+	InstagramStory bool `json:"instagram_story"`
+	VkPage         bool `json:"vk_page"`
+	VkPublic       bool `json:"vk_public"`
+	TikTok       bool `json:"tiktok"`
+	Makaba       bool `json:"makaba"`
 }
 
 type Repost struct {
-	InstagramPost  bool    `json:"instagram_post"`
-	InstagramStory bool    `json:"instagram_story"`
-	VkPage         bool    `json:"vk_page"`
-	VkPublic       bool    `json:"vk_public"`
+	TelegramChanID int    `json:"telegram_channel_id"`
+	Board          string `json:"board"`
+	Thread         string `json:"thread"`
 }
 
 type Payload struct {
-	Timestamp               int64    `json:"timestamp"`
-	InstagramPostTimestamp  int64    `json:"instagram_post_timestamp"`
-	InstagramStoryTimestamp int64    `json:"instagram_story_timestamp"`
-	VkPageTimestamp         int64    `json:"vk_page_timestamp"`
-	VkPublicTimestamp       int64    `json:"vk_public_timestamp"`
-	VkStatusTimestamp       int64    `json:"vk_status_timestamp"`
-	Person                  string   `json:"person"`             //
-	InstagramUsername       string   `json:"instagram_username"` //
-	InstagramID             int64    `json:"instagram_id"`       //
-	Type                    string   `json:"type"`
-	From                    string   `json:"from"`
-	Source                  string   `json:"source"`
-	TelegramChanID          int64    `json:"telegram_chan_id"` //
-	RepostMakabaEnabled     bool     `json:"repost_makaba_enabled"`
-	RepostTelegramEnabled   bool     `json:"repost_telegram_enabled"`
-	RepostVkStatusEnabled   bool     `json:"repost_vk_status_enabled"`
-	RepostVkPageEnabled     bool     `json:"repost_vk_page_enabled"`
-	RepostVkPublicEnabled   bool     `json:"repost_vk_public_enabled"`
-	RepostTelegramChanID    int64    `json:"repost_telegram_chan_id"` //
-	VkPageID                int64    `json:"vk_page_id"`              //
-	VkPublicID              int64    `json:"vk_public_id"`            //
-	DvachBoard              string   `json:"2ch_board"`
-	Files                   []string `json:"files"`
-	Caption                 string   `json:"caption"`
+	// Body
+	Person         string
+	Timestamp      int
+	Caption        string
+	From           string
+	Type           string
+	Source         string
+	Files          []string
+	
+	// Destination
+	TelegramChanID int
+	Board          string
+	Thread         string
 }
 
 // we initialize our Users array
 var users Users
-
 
 // LoadDBJSON is trying to load our DB into structs from json file
 func LoadDBJSON() {

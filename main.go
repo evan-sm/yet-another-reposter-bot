@@ -5,7 +5,7 @@ import (
 	//"fmt"
 	//"io/ioutil"
 	"log"
-	"reflect"
+	//"reflect"
 	"time"
 
 	"github.com/caarlos0/env/v6"
@@ -30,18 +30,17 @@ func checkNewPosts() {
 	pp.Println(users)
 
 	// Iterate through every user within our users array
-	for k, v := range users.Users {
-		log.Printf("key: \"%v\" | value: \"%v\"", k, v)
+	for k, _ := range users.Users {
+		//log.Printf("key: \"%v\" | value: \"%v\"", k, v)
 
 		// Check socials
-		log.Println(reflect.TypeOf(users.Users[k]))
-		checkVK(users.Users[k])
+		//log.Println(reflect.TypeOf(users.Users[k]))
+		checkVK(k, users.Users[k])
 		checkIG()
-		checkTT()
+		checkTT(users.Users[k])
 
 		//log.Printf("%v", post)
 		//log.Printf("%v", post.Text)
-
 
 		break
 		time.Sleep(2000)
@@ -58,9 +57,13 @@ func checkIG() {
 	log.Println("Checking Instagram")
 }
 
-
-func checkTT() {
-	log.Println("Checking TikTok")
+func checkTT(u User) {
+	log.Printf("Checking TikTok %v\n", u.Social.TikTok)
+	videos, err := getLikedVideos(u, 3)
+	if err != nil {
+		log.Printf("%v", err)
+	}
+	pp.Println(videos)
 }
 
 func sendRepost() {

@@ -5,58 +5,57 @@ import (
 	//"fmt"
 	//"io/ioutil"
 	//"github.com/SevereCloud/vksdk/v2/api/params"
-	"log"
 	"errors"
+	"fmt"
+	"log"
 	"reflect"
 	//"os"
 	//"strconv"
-	"github.com/k0kubun/pp"
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/object"
+	"github.com/k0kubun/pp"
 )
 
-
-func checkVK(u User) {
+func checkVK(k int, u User) {
 	if post, new := checkNewPostVKPublic(u); new {
-		log.Printf("New VK public post found! \"%v\"", post.Text)
 		// Prepare payload
-		prepareVKPost(post)
+		payload := preparePayloadFromVK(u, post)
+		pp.Println(payload)
+
+		// Send to Telegram
+		if ok := sendRepostTG(payload); ok {
+			users.Users[k].Date.VkPublic = payload.Timestamp
+			SaveDBJSON()
+		}
+		// Send to Makaba
+		if ok := sendRepostMakaba(u, payload); ok {
+			users.Users[k].Date.VkPublic = payload.Timestamp
+			SaveDBJSON()
+		}
 	}
+
 	if post, new := checkNewPostVKPage(u); new {
-		log.Printf("New VK page post found! \"%v\"", post.Text)
+		// Prepare payload
+		payload := preparePayloadFromVK(u, post)
+		pp.Println(payload)
 
-	}
-}
-
-func prepareVKPost(post object.WallWallpost) {
-	var files []string
-	log.Printf("Preparing VK post.")
-
-	for _, v := range post.Attachments {
-		if v.Type == "photo" {
-			url := getVKOriginalSize(v.Photo)
-			files = append(files, url) // add .jpg to slice
+		// Send to Telegram
+		if ok := sendRepostTG(payload); ok {
+			users.Users[k].Date.VkPage = payload.Timestamp
+			SaveDBJSON()
+		}
+		
+		// Send to Makaba
+		if ok := sendRepostMakaba(u, payload); ok {
+			users.Users[k].Date.VkPublic = payload.Timestamp
+			SaveDBJSON()
 		}
 	}
-	pp.Printf("%v\n", files)
-	}
-
-func getVKOriginalSize(p object.PhotosPhoto) string {
-	var width float64
-	var url string
-	for _, v := range p.Sizes {
-		if v.Width > width {
-			width = v.Width
-			url = v.URL
-		}
-	}
-	log.Printf("Original .jpg 🖼 %vp @ %v\n", width, url)
-	return url
 }
 
 func checkNewPostVKPublic(u User) (object.WallWallpost, bool) {
 	// Skip if repost disabled
-	if !u.Repost.VkPublic {
+	if !u.Setting.VkPublic {
 		return object.WallWallpost{}, false
 	}
 	log.Printf("Checking VK public. https://vk.com/wall%v\n", u.Social.VkPublicID)
@@ -73,16 +72,15 @@ func checkNewPostVKPublic(u User) (object.WallWallpost, bool) {
 	}
 
 	if post.Date > u.Date.VkPublic {
-		//log.Println("post.Date > u.Date.VkPublicID")
+		log.Printf("New VK public post found! \"%v\"", post.Text)
 		return post, true
 	}
-
 	return post, false
 }
 
 func checkNewPostVKPage(u User) (object.WallWallpost, bool) {
 	// Skip if repost disabled
-	if !u.Repost.VkPage {
+	if !u.Setting.VkPage {
 		return object.WallWallpost{}, false
 	}
 	log.Printf("Checking VK page. https://vk.com/id%v\n", u.Social.VkPageID)
@@ -99,10 +97,9 @@ func checkNewPostVKPage(u User) (object.WallWallpost, bool) {
 	}
 
 	if post.Date > u.Date.VkPage {
-		//log.Println("post.Date > u.Date.VkPublicID")
+		log.Printf("New VK page post found! \"%v\"", post.Text)
 		return post, true
 	}
-
 	return post, false
 }
 
@@ -110,14 +107,10 @@ func checkVKPage() {
 	log.Println("Checking VK page.")
 }
 
-
-
 func getLastVKPost(id int) (object.WallWallpost, error) {
 	var date int
 	var i int
 	var post object.WallWallpost
-
-	log.Printf("Checking VK wall. %d\n", id)
 
 	vk := api.NewVK(cfg.VKToken)
 
@@ -142,27 +135,19 @@ func getLastVKPost(id int) (object.WallWallpost, error) {
 	// Drop
 	for k, v := range wall.Items {
 
-		//pp.Printf("len: %v", v.Attachments[1])
 		// Ignore reposts
 		if len(v.CopyHistory) != 0 {
 			continue
 		}
 
-		// Ignore non-photo posts
-
-
 		if v.Date > date {
 			date = v.Date
 			i = k
 		}
-		
-/*		if v.Text == "" && len(v.Attachments[k].Photo) == 0{
-			log.Printf("No attachments nor text\n")
-			continue
-		}*/
+
 		pp.Println(k, v.Text, len(v.CopyHistory), len(v.Attachments), len(v.Attachments), v.Date)
 	}
-	log.Printf("date: %d; index: %d", date, i)
+	//log.Printf("date: %d; index: %d", date, i)
 	//log.Println(reflect.TypeOf(wall.Items[i]))
 	return wall.Items[i], nil
 }
@@ -170,4 +155,43 @@ func getLastVKPost(id int) (object.WallWallpost, error) {
 func checkVKStatus(id int) {
 	log.Printf("Checking VK status %v\n", id)
 
+}
+
+func preparePayloadFromVK(u User, post object.WallWallpost) Payload {
+	var files []string
+	
+	log.Printf("Preparing payload from VK post.")
+
+	for _, v := range post.Attachments {
+		if v.Type == "photo" {
+			url := getVKOriginalSize(v.Photo)
+			files = append(files, url) // add .jpg url to slice
+		}
+	}
+	//pp.Printf("%v\n", files)
+	p := Payload{}
+	p.Person = u.Name
+	p.Timestamp = post.Date
+	p.From = "vk"
+	p.Caption = post.Text
+	p.Type = "post"
+	p.TelegramChanID = u.Repost.TelegramChanID
+	p.Board = u.Repost.Board
+	p.Thread = u.Repost.Thread
+	p.Source = fmt.Sprintf("https://vk.com/wall%v_%v", post.OwnerID, post.ID)
+	p.Files = files
+	return p
+}
+
+func getVKOriginalSize(p object.PhotosPhoto) string {
+	var width float64
+	var url string
+	for _, v := range p.Sizes {
+		if v.Width > width {
+			width = v.Width
+			url = v.URL
+		}
+	}
+	log.Printf("Original .jpg 🖼 %vp @ %v\n", width, url)
+	return url
 }
