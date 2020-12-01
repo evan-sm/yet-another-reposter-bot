@@ -22,6 +22,8 @@ func sendRepostTG(p Payload) bool {
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
+	time.Sleep(1 * time.Second)
+
 	// Create InputMedia for SendAlbum method
 	for _, v := range p.Files {
 		if strings.Contains(v, ".jpg") {
@@ -42,7 +44,7 @@ func sendRepostTG(p Payload) bool {
 
 	menu := &tb.ReplyMarkup{}
 	menu.Inline(
-		menu.Row(menu.URL("URL", p.Source)),)
+		menu.Row(menu.URL("URL", p.Source)))
 
 	if len(album) == 0 {
 		_, err = tg.Send(tb.ChatID(p.TelegramChanID), p.Caption, menu)

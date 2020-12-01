@@ -36,7 +36,7 @@ type Social struct {
 	InstagramID int    `json:"instagram_id"`
 	VkPageID    int    `json:"vk_page_id"`
 	VkPublicID  int    `json:"vk_public_id"`
-	TikTok  string    `json:"tiktok"`
+	TikTok      string `json:"tiktok"`
 }
 
 // Date struct which contains a
@@ -46,7 +46,7 @@ type Date struct {
 	InstagramStory int `json:"instagram_story"`
 	VkPage         int `json:"vk_page"`
 	VkPublic       int `json:"vk_public"`
-	TikTok       int `json:"tiktok"`
+	TikTok         int `json:"tiktok"`
 }
 
 type Setting struct {
@@ -54,8 +54,8 @@ type Setting struct {
 	InstagramStory bool `json:"instagram_story"`
 	VkPage         bool `json:"vk_page"`
 	VkPublic       bool `json:"vk_public"`
-	TikTok       bool `json:"tiktok"`
-	Makaba       bool `json:"makaba"`
+	TikTok         bool `json:"tiktok"`
+	Makaba         bool `json:"makaba"`
 }
 
 type Repost struct {
@@ -66,14 +66,14 @@ type Repost struct {
 
 type Payload struct {
 	// Body
-	Person         string
-	Timestamp      int
-	Caption        string
-	From           string
-	Type           string
-	Source         string
-	Files          []string
-	
+	Person    string
+	Timestamp int
+	Caption   string
+	From      string
+	Type      string
+	Source    string
+	Files     []string
+
 	// Destination
 	TelegramChanID int
 	Board          string

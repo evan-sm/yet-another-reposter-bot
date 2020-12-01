@@ -44,7 +44,7 @@ func checkVK(k int, u User) {
 			users.Users[k].Date.VkPage = payload.Timestamp
 			SaveDBJSON()
 		}
-		
+
 		// Send to Makaba
 		if ok := sendRepostMakaba(u, payload); ok {
 			users.Users[k].Date.VkPublic = payload.Timestamp
@@ -159,7 +159,7 @@ func checkVKStatus(id int) {
 
 func preparePayloadFromVK(u User, post object.WallWallpost) Payload {
 	var files []string
-	
+
 	log.Printf("Preparing payload from VK post.")
 
 	for _, v := range post.Attachments {

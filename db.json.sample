@@ -4,24 +4,30 @@
       "name": "wmw",
       "social": {
         "instagram": "wmw",
-        "instagram_id": 123,
-        "instagram_post_timestamp": 0,
-        "instagram_story_timestamp": 0,
-        "vk_page_id": 1,
-        "vk_page_timestamp": 0,
-        "vk_public_id": -1,
-        "vk_public_timestamp": 0
-      }
-    },
-    {
-      "name": "ivan",
-      "social": {
-        "instagram": "sharishanya",
-        "instagram_id": 123,
-        "vk_page_id": 1,
-        "vk_page_timestamp": 0,
-        "vk_public_id": -1,
-        "vk_public_timestamp": 0
+        "instagram_id": 0,
+        "vk_page_id": 0,
+        "vk_public_id": -0,
+        "tiktok": "wmwshka"
+      },
+      "date": {
+        "instagram_post": 0,
+        "instagram_story": 0,
+        "vk_page": 0,
+        "vk_public": 1606077195,
+        "tiktok": 0
+      },
+      "setting": {
+        "instagram_post": false,
+        "instagram_story": false,
+        "vk_page": false,
+        "vk_public": false,
+        "tiktok": false,
+        "makaba": false
+      },
+      "repost": {
+        "telegram_channel_id": -1001424937175,
+        "board": "test",
+        "thread": "навальный"
       }
     }
   ]

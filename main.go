@@ -25,36 +25,32 @@ func main() {
 }
 
 func checkNewPosts() {
-	LoadDBJSON()
 
-	pp.Println(users)
+	for {
+		LoadDBJSON()
+		pp.Println(users)
 
-	// Iterate through every user within our users array
-	for k, _ := range users.Users {
-		//log.Printf("key: \"%v\" | value: \"%v\"", k, v)
+		// Iterate through every user within our users array
+		for k, _ := range users.Users {
+			//log.Printf("key: \"%v\" | value: \"%v\"", k, v)
 
-		// Check socials
-		//log.Println(reflect.TypeOf(users.Users[k]))
-		checkVK(k, users.Users[k])
-		checkIG()
-		checkTT(users.Users[k])
+			// Check socials
+			//log.Println(reflect.TypeOf(users.Users[k]))
+			checkVK(k, users.Users[k])
+			checkIG(k, users.Users[k])
+			//checkTT(users.Users[k])
 
-		//log.Printf("%v", post)
-		//log.Printf("%v", post.Text)
+			//log.Printf("%v", post)
+			//log.Printf("%v", post.Text)
 
-		break
-		time.Sleep(2000)
-		//checkIGStories(users.Users[k].Social.InstagramID)
-		//checkIGPost()
-		// Do some changes to struct
-		users.Users[k].Social.InstagramID = 123
+			time.Sleep(2000)
+			//checkIGStories(users.Users[k].Social.InstagramID)
+			//checkIGPost()
+			// Do some changes to struct
+		}
+		time.Sleep(5 * time.Minute)
 	}
 
-	//SaveDBJSON()
-}
-
-func checkIG() {
-	log.Println("Checking Instagram")
 }
 
 func checkTT(u User) {

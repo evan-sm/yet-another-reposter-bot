@@ -1,16 +1,16 @@
 package main
 
 import (
-	"log"
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
-	"bytes"
+	"io/ioutil"
+	"log"
+	"mime/multipart"
 	"net/http"
 	"net/http/cookiejar"
-	"mime/multipart"
 	"net/url"
-	"io/ioutil"
-	"encoding/json"
 	//"mime/multipart"
 	"strings"
 	//"reflect"
@@ -44,7 +44,7 @@ func sendRepostMakaba(u User, p Payload) bool {
 	num := findThread(p)
 	log.Printf("/%v/ : #%v", p.Board, num)
 
-	valuesBase  := prepareBase(p, p.Board, num)
+	valuesBase := prepareBase(p, p.Board, num)
 	valuesFiles := prepareFiles(p.Files)
 
 	client, ok := customClient()
@@ -57,7 +57,6 @@ func sendRepostMakaba(u User, p Payload) bool {
 		return ok
 	}
 	return false
-
 
 }
 
@@ -130,7 +129,6 @@ func makabaPost(client *http.Client, url string, valuesBase map[string]io.Reader
 	return err, success, num
 }
 
-
 func getCatalog(board string) []byte {
 	url := fmt.Sprintf("https://2ch.hk/%v/threads.json", board)
 	resp, err := http.Get(url)
@@ -159,7 +157,6 @@ func findThread(p Payload) string {
 	//fmt.Println("Thread number is:", num)
 	return num
 }
-
 
 func customClient() (*http.Client, bool) {
 	jar, _ := cookiejar.New(nil)
@@ -193,10 +190,10 @@ func prepareBase(p Payload, board string, num string) map[string]io.Reader {
 	//comment = fmt.Sprintf("[sup]Стрим запустился! %v ⛓[/sup]\n\n", jsonPayload.Source)
 
 	baseReader = map[string]io.Reader{
-		"task": strings.NewReader("post"),
-		"board":  strings.NewReader(board),  
+		"task":   strings.NewReader("post"),
+		"board":  strings.NewReader(board),
 		"thread": strings.NewReader(num),
-		"name":   strings.NewReader(name),   // Tripcode for attention whoring
+		"name":   strings.NewReader(name), // Tripcode for attention whoring
 		//"email": strings.NewReader(""), // U kid right?
 		//"subject": strings.NewReader(jsonPayload.Person),
 		"comment": strings.NewReader(comment), // Post text

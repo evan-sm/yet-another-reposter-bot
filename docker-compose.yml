@@ -1,22 +1,5 @@
 version: '2.1'
 services:
-  db:
-    image: redis:6-alpine
-    restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
-    networks:
-      - backend
-    env_file:
-      - ./.env
-    volumes:
-      - ./redis-data:/data
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 3s
-      timeout: 3s
-      retries: 30
   yarb:
     build: .
     #restart: on-failure
@@ -24,11 +7,10 @@ services:
       - backend
     env_file:
       - ./.env
+    volumes:
+      - ./db.json:/db.json
         #stdin_open: true
         #tty: true
-    depends_on:
-      db:
-        condition: service_healthy
 networks:
   backend:
     driver: bridge
