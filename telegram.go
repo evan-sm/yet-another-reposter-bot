@@ -11,7 +11,11 @@ import (
 
 var tg *tb.Bot
 
-func sendRepostTG(p Payload) bool {
+func sendRepostTG(u User, p Payload) bool {
+	// Skip if repost disabled
+	if !u.Setting.Telegram {
+		return false
+	}
 	log.Println("Sending payload to telegram.")
 
 	var err error

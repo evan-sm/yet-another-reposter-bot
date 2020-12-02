@@ -56,6 +56,7 @@ type Setting struct {
 	VkPublic       bool `json:"vk_public"`
 	TikTok         bool `json:"tiktok"`
 	Makaba         bool `json:"makaba"`
+	Telegram       bool `json:"telegram"`
 }
 
 type Repost struct {

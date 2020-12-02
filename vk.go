@@ -23,7 +23,7 @@ func checkVK(k int, u User) {
 		pp.Println(payload)
 
 		// Send to Telegram
-		if ok := sendRepostTG(payload); ok {
+		if ok := sendRepostTG(u, payload); ok {
 			users.Users[k].Date.VkPublic = payload.Timestamp
 			SaveDBJSON()
 		}
@@ -40,7 +40,7 @@ func checkVK(k int, u User) {
 		pp.Println(payload)
 
 		// Send to Telegram
-		if ok := sendRepostTG(payload); ok {
+		if ok := sendRepostTG(u, payload); ok {
 			users.Users[k].Date.VkPage = payload.Timestamp
 			SaveDBJSON()
 		}

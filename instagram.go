@@ -40,7 +40,7 @@ func checkIG(k int, u User) {
 		pp.Println(payload)
 
 		// Send to Telegram
-		if ok := sendRepostTG(payload); ok {
+		if ok := sendRepostTG(u, payload); ok {
 			users.Users[k].Date.InstagramPost = payload.Timestamp
 			SaveDBJSON()
 		}
@@ -57,7 +57,7 @@ func checkIG(k int, u User) {
 		pp.Println(payload)
 
 		// Send to Telegram
-		if ok := sendRepostTG(payload); ok {
+		if ok := sendRepostTG(u, payload); ok {
 			users.Users[k].Date.InstagramStory = payload.Timestamp
 			SaveDBJSON()
 		}

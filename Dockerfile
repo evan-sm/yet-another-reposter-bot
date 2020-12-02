@@ -16,6 +16,6 @@ COPY --from=build /etc/passwd /etc/passwd
 COPY --from=build /etc/group /etc/group
 COPY --from=build /app/yarb /app/yarb
 
-USER 10001:10001
+USER 1000:1000
 
 ENTRYPOINT ["/app/yarb"]
