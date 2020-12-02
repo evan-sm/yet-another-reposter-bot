@@ -14,7 +14,7 @@ import (
 	//"mime/multipart"
 	"strings"
 	//"reflect"
-	//"time"
+	"time"
 
 	"github.com/tidwall/gjson"
 )
@@ -54,6 +54,7 @@ func sendRepostMakaba(u User, p Payload) bool {
 
 	if _, ok, number := makabaPost(client, postingUrl, valuesBase, valuesFiles); ok {
 		log.Printf("https://2ch.hk/%v/res/%v.html#%v", p.Board, num, number)
+		time.Sleep(20 * time.Second)
 		return ok
 	}
 	return false
