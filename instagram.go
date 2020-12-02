@@ -29,8 +29,10 @@ func checkIG(k int, u User) {
 	// Switch session ID to avoid rate-limits
 	if IGSession {
 		IGSessionID = cfg.IGSessionID
+		IGSession = false
 	} else {
 		IGSessionID = cfg.IGSessionID2
+		IGSession = true
 	}
 	log.Printf("Checking Instagram\nIGSessionID is: %v\n", IGSessionID)
 
